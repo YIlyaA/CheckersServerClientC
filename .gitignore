@@ -1,0 +1,6 @@
+server/*.exe
+server/*.out
+server/test.c
+server/test
+server/server
+.vscode/

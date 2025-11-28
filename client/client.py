@@ -167,7 +167,6 @@ def main():
             print("Error from server:", line)
 
     sock.close()
-    print("Client terminated.")
 
 
 if __name__ == "__main__":

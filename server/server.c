@@ -90,6 +90,35 @@ static Player *find_other_player(Player *p)
     return NULL;
 }
 
+static void handle_player_disconnect(Player *me)
+{
+    if (me->in_game && me->game != NULL)
+    {
+        Game *g = me->game;
+        Player *op = find_other_player(me);
+        if (op != NULL)
+        {
+            send_line(op->socket_fd, "OPPONENT_LEFT\n");
+            op->in_game = 0;
+            op->game = NULL;
+        }
+        me->in_game = 0;
+        me->game = NULL;
+
+        int gi = find_game_index(g);
+        if (gi >= 0)
+        {
+            games[gi].in_use = 0;
+        }
+    }
+    else if (waiting_player == me)
+    {
+        waiting_player = NULL;
+    }
+
+    me->socket_fd = -1;
+}
+
 void *socketThread(void *arg)
 {
     int sock = *((int *)arg);
@@ -207,31 +236,8 @@ void *socketThread(void *arg)
             printf("Client %d disconnected\n", me->id);
             pthread_mutex_lock(&global_lock);
 
-            if (me->in_game && me->game != NULL)
-            {
-                Game *g = me->game; // запомним, пока не обнулили
-                Player *op = find_other_player(me);
-                if (op != NULL)
-                {
-                    send_line(op->socket_fd, "OPPONENT_LEFT\n");
-                    op->in_game = 0;
-                    op->game = NULL;
-                }
-                me->in_game = 0;
-                me->game = NULL;
+            handle_player_disconnect(me);
 
-                int gi = find_game_index(g);
-                if (gi >= 0)
-                {
-                    games[gi].in_use = 0;
-                }
-            }
-            else if (waiting_player == me)
-            {
-                waiting_player = NULL;
-            }
-
-            me->socket_fd = -1;
             pthread_mutex_unlock(&global_lock);
             break;
         }
@@ -242,31 +248,8 @@ void *socketThread(void *arg)
         {
             pthread_mutex_lock(&global_lock);
 
-            if (me->in_game && me->game != NULL)
-            {
-                Game *g = me->game;
-                Player *op = find_other_player(me);
-                if (op != NULL)
-                {
-                    send_line(op->socket_fd, "OPPONENT_LEFT\n");
-                    op->in_game = 0;
-                    op->game = NULL;
-                }
-                me->in_game = 0;
-                me->game = NULL;
-
-                int gi = find_game_index(g);
-                if (gi >= 0)
-                {
-                    games[gi].in_use = 0;
-                }
-            }
-            else if (waiting_player == me)
-            {
-                waiting_player = NULL;
-            }
-
-            me->socket_fd = -1;
+            handle_player_disconnect(me);
+            
             pthread_mutex_unlock(&global_lock);
             break;
         }

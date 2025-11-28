@@ -29,12 +29,12 @@ typedef enum
 typedef struct
 {
     char board[BOARD_SIZE][BOARD_SIZE];
-    PlayerColor turn;
-    GameResult result;
+    PlayerColor turn; // COLOR_WHITE or COLOR_BLACK
+    GameResult result; // GAME_RUNNING, GAME_WHITE_WIN, GAME_BLACK_WIN, GAME_DRAW
 
-    int must_continue_capture;
-    int cap_row;
-    int cap_col;
+    int must_continue_capture; // whether the current player must continue a capture sequence
+    int cap_row; // row of the piece that must continue capturing
+    int cap_col; // column of the piece that must continue capturing
 } Game;
 
 void game_init(Game *g);

@@ -63,57 +63,6 @@ void game_init(Game *g)
     g->cap_col = -1;
 }
 
-void game_print(const Game *g)
-{
-    printf("    0 1 2 3 4 5 6 7  (col)\n");
-    printf("   -----------------\n");
-    for (int r = 0; r < BOARD_SIZE; ++r)
-    {
-        printf("%d | ", r);
-        for (int c = 0; c < BOARD_SIZE; ++c)
-        {
-            char ch = g->board[r][c];
-
-            if (!is_dark_square(r, c) && ch == CELL_EMPTY)
-            {
-                ch = ' ';
-            }
-
-            printf("%c ", ch);
-        }
-        printf("|\n");
-    }
-    printf("   -----------------\n");
-    printf("Turn: %s\n", g->turn == COLOR_WHITE ? "WHITE" : "BLACK");
-}
-
-void game_print_for_player(const Game *g, PlayerColor pov)
-{
-    printf("View for %s\n", pov == COLOR_WHITE ? "WHITE" : "BLACK");
-    printf("    0 1 2 3 4 5 6 7  (col)\n");
-    printf("   -----------------\n");
-
-    for (int vr = 0; vr < BOARD_SIZE; ++vr)
-    {
-        int r = (pov == COLOR_WHITE) ? vr : (BOARD_SIZE - 1 - vr);
-        printf("%d | ", vr);
-        for (int vc = 0; vc < BOARD_SIZE; ++vc)
-        {
-            int c = (pov == COLOR_WHITE) ? vc : (BOARD_SIZE - 1 - vc);
-            char ch = g->board[r][c];
-
-            if (!is_dark_square(r, c) && ch == CELL_EMPTY)
-            {
-                ch = ' ';
-            }
-
-            printf("%c ", ch);
-        }
-        printf("|\n");
-    }
-    printf("   -----------------\n");
-    printf("Turn: %s\n", g->turn == COLOR_WHITE ? "WHITE" : "BLACK");
-}
 
 static int can_capture_from(const Game *g, int r, int c)
 {

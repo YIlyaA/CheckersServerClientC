@@ -32,7 +32,7 @@ def print_board(board_str: str, color: str | None):
     pov = color
 
     print()
-    print("    0 1 2 3 4 5 6 7  (col)")
+    print("    0 1 2 3 4 5 6 7 ")
     print("   -----------------")
 
     for vr in range(BOARD_SIZE):

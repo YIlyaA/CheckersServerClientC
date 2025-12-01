@@ -1,5 +1,6 @@
 import socket
 import sys
+from typing import Optional
 
 BOARD_SIZE = 8
 
@@ -15,7 +16,7 @@ def parse_board(line: str) -> str:
     return board_str[:64]
 
 
-def print_board(board_str: str, color: str | None):
+def print_board(board_str: str, color: Optional[str]):
     if len(board_str) != 64:
         print("Invalid board length:", len(board_str))
         return

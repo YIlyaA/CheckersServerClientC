@@ -38,8 +38,6 @@ typedef struct
 } Game;
 
 void game_init(Game *g);
-void game_print(const Game *g);
-void game_print_for_player(const Game *g, PlayerColor pov);
 int game_is_move_legal(const Game *g, int from_row, int from_col, int to_row, int to_col);
 int game_apply_move(Game *g, int from_row, int from_col, int to_row, int to_col);
 int game_is_finished(Game *g);
